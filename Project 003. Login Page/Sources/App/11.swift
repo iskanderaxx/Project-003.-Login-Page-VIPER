@@ -1,13 +1,46 @@
 //
-//  ViewController.swift
+//  11.swift
 //  Project 003. Login Page
 //
-//  Created by Mac Alexander on 11.01.2024.
+//  Created by Mac Alexander on 20.01.2024.
 //
 
-import UIKit
+import Foundation
 
-/* Я переделал название ViewController на First Screen, так как, по сути, у нас будет 1 экран, final class взято из видео для ДЗ, лектор говорил, что это хорошо для оптимизации. Контроллер, как говорили в том же видео, не должен быть загруженным, поэтому я добавил расширения в дополнительный файл с расширениями.*/
+protocol View {
+    var presenter: LoginPresenter? { get set }
+    
+    func update(with data: [Data])
+    func update(with error: String)
+}
+
+class LoginView: UIViewController, View {
+    var presenter: LoginPresenter?
+    
+    private let tableView: UITableView = {
+        let table = UITableView()
+        table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        table.isHidden = true
+        return table
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.addSubview(tableView)
+        tableView.delegate = self
+    }
+    
+    func update(with data: [Data]) {
+        <#code#>
+    }
+    
+    func update(with error: String) {
+        <#code#>
+    }
+    
+    
+}
+
 class FirstScreen: UIViewController {
     
     // MARK: - UIElements/Oulets
@@ -344,6 +377,89 @@ class FirstScreen: UIViewController {
     private func signUpButtonPressed() {
         print("Sign up button pressed, loading ... ")
     }
-
 }
 
+// MARK: - Extensions
+
+extension UITextField {
+    func setLeftIcon(_ image: UIImage) {
+        let iconView = UIImageView(frame: CGRect(x: 20, y: 5, width: 20, height: 20))
+        iconView.image = image
+        let iconContainerView: UIView = UIView(frame: CGRect(x: 20, y: 0, width: 30, height: 30))
+        iconContainerView.addSubview(iconView)
+        leftView = iconContainerView
+        leftViewMode = .always
+    }
+}
+
+extension UITextField {
+    func setRightIcon(_ image: UIImage) {
+        let iconView = UIImageView(frame: CGRect(x: -5, y: 5, width: 20, height: 20))
+        iconView.image = image
+        let iconContainerView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+        iconContainerView.addSubview(iconView)
+        rightView = iconContainerView
+        rightViewMode = .always
+    }
+}
+
+
+
+protocol Interactor {
+    var presenter: LoginPresenter? { get set }
+    
+    func getData()
+}
+
+class LoginInteractor: Interactor {
+    var presenter: LoginPresenter?
+    
+    func getData() {
+        <#code#>
+    }
+}
+
+
+protocol Presenter {
+    var view: LoginView? { get set }
+    var interactor: LoginInteractor? { get set }
+    var router: LoginRouter? { get set }
+    
+    func interactorDidFetchData(with result: Result<[Data], Error>)
+}
+
+class LoginPresenter: Presenter {
+    var view: LoginView?
+    
+    var interactor: LoginInteractor?
+    
+    var router: LoginRouter?
+    
+    func interactorDidFetchData(with result: Result<[Data], Error>) {
+        
+    }
+}
+
+protocol Entity {
+    var login: String { get set }
+    var password: String { get set }
+}
+
+struct Data: Entity, Codable {
+    var login: String
+    var password: String
+}
+
+protocol Router {
+    static func startTheApp() -> Router
+}
+
+class LoginRouter: Router {
+    static func startTheApp() -> Router {
+        let router = LoginRouter()
+        
+        // Assign VIP
+        
+        return router
+    }
+}
