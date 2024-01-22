@@ -7,45 +7,17 @@
 
 import UIKit
 
+// 5. Презетер сообщает Роутеру о необходимости открыть новый экран (экран аккаунта пользователя)
 protocol CreateNewAccountRouterInput {
-    func openAuthentificationScreen()
+    func openUserProfileScreenWith(login: String)
 }
 
-final class CreateAccountRouter: CreateNewAccountRouterInput {
-    func openAuthentificationScreen() {
-        <#code#>
-    }
-}
-
-
-
-typealias EntryPoint = SampleView & UIViewController
-
-protocol SampleRouter {
-    var entry: EntryPoint? { get }
+final class LoginRouter: CreateNewAccountRouterInput {
+    weak var rootViewController: UIViewController?
     
-    static func start() -> SampleRouter
-}
-
-final class RouterComponent: SampleRouter {
-    var entry: EntryPoint?
-    
-    static func start() -> SampleRouter {
-        let router = RouterComponent()
-        
-        var view: SampleView = ViewControllerComponent()
-        var presenter: SamplePresenter = PresenterComponent()
-        var interactor: SampleInteractor = InteractorComponent()
-        
-        view.presenter = presenter
-        interactor.presenter = presenter
-        
-        presenter.view = view
-        presenter.interactor = interactor
-        presenter.router = router
-        
-        router.entry = view as? EntryPoint
-        
-        return router
+    func openUserProfileScreenWith(login: String) {
+        let controller = UIViewController(nibName: nil, bundle: nil)
+        controller.view.backgroundColor = .systemIndigo
+        rootViewController?.present(controller, animated: true, completion: nil)
     }
 }

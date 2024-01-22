@@ -1,24 +1,23 @@
 //
-//  ViewController.swift
+//  LoginView.swift
 //  Project 003. Login Page
 //
-//  Created by Mac Alexander on 11.01.2024.
+//  Created by Mac Alexander on 19.01.2024.
 //
 
 import UIKit
-
-    // MARK: - Protocols & Classes
 
 protocol CreateNewAccountViewInput {
     var output: CreateNewAccountViewOutput? { get set }
 }
 
+// 1. Вызывается, когда пользователь введет данные и нажмет кнопку "Login"
 protocol CreateNewAccountViewOutput {
     func createAccountWith(login: String, password: String)
-    
 }
 
-final class CreateAccountView: UIViewController, CreateNewAccountViewInput {
+// Как это бывает в View с MVP или MVVM, Вью в данном VIPER является связкой View + ViewController
+final class LoginView: UIViewController, CreateNewAccountViewInput {
     var output: CreateNewAccountViewOutput?
     
     // MARK: - UIElements/Oulets
@@ -42,10 +41,10 @@ final class CreateAccountView: UIViewController, CreateNewAccountViewInput {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
+
     private lazy var loginEntryTextfield: UITextField = {
         let textfield = UITextField()
-        textfield.placeholder = "Your login ..."
+        textfield.placeholder = "login001"
         textfield.textColor = .systemGray
         textfield.backgroundColor = .white
         textfield.textAlignment = .center
@@ -55,10 +54,10 @@ final class CreateAccountView: UIViewController, CreateNewAccountViewInput {
         textfield.translatesAutoresizingMaskIntoConstraints = false
         return textfield
     }()
-    
+
     private lazy var passwordEntryTextfield: UITextField = {
         let textfield = UITextField()
-        textfield.placeholder = "Your password ..."
+        textfield.placeholder = "password001"
         textfield.textColor = .systemGray
         textfield.backgroundColor = .white
         textfield.textAlignment = .center
@@ -67,7 +66,7 @@ final class CreateAccountView: UIViewController, CreateNewAccountViewInput {
         textfield.translatesAutoresizingMaskIntoConstraints = false
         return textfield
     }()
-    
+
     private lazy var loginButton: UIButton = {
         let logButton = UIButton(type: .system)
         logButton.clipsToBounds = true
@@ -86,7 +85,7 @@ final class CreateAccountView: UIViewController, CreateNewAccountViewInput {
         logButton.translatesAutoresizingMaskIntoConstraints = false
         return logButton
     }()
-    
+
     private lazy var forgotPasswordButton: UIButton = {
         let helpButton = UIButton(type: .system)
         helpButton.clipsToBounds = true
@@ -98,7 +97,7 @@ final class CreateAccountView: UIViewController, CreateNewAccountViewInput {
         helpButton.translatesAutoresizingMaskIntoConstraints = false
         return helpButton
     }()
-    
+
     private lazy var leftMargin: UIView = {
         let offset = UIView()
         offset.backgroundColor = .systemGray
@@ -106,7 +105,7 @@ final class CreateAccountView: UIViewController, CreateNewAccountViewInput {
         offset.translatesAutoresizingMaskIntoConstraints = false
         return offset
     }()
-    
+
     private lazy var socialMediaConnectionLabel: UILabel = {
         let connectLabel = UILabel()
         connectLabel.text = "or connect with"
@@ -116,7 +115,7 @@ final class CreateAccountView: UIViewController, CreateNewAccountViewInput {
         connectLabel.translatesAutoresizingMaskIntoConstraints = false
         return connectLabel
     }()
-    
+
     private lazy var rightMargin: UIView = {
         let offset = UIView()
         offset.backgroundColor = .systemGray
@@ -124,7 +123,7 @@ final class CreateAccountView: UIViewController, CreateNewAccountViewInput {
         offset.translatesAutoresizingMaskIntoConstraints = false
         return offset
     }()
-    
+
     private lazy var socialMediaConnectionsStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
@@ -137,7 +136,7 @@ final class CreateAccountView: UIViewController, CreateNewAccountViewInput {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    
+
     private lazy var facebookLoginButton: UIButton = {
         let button = UIButton(type: .system)
         button.clipsToBounds = true
@@ -157,7 +156,7 @@ final class CreateAccountView: UIViewController, CreateNewAccountViewInput {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
+
     private lazy var twitterLoginButton: UIButton = {
         let button = UIButton(type: .system)
         button.clipsToBounds = true
@@ -177,7 +176,7 @@ final class CreateAccountView: UIViewController, CreateNewAccountViewInput {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
+
     private lazy var doNotHaveAccountQuestionLabel: UILabel = {
         let label = UILabel()
         label.text = "Don't have account?"
@@ -189,7 +188,7 @@ final class CreateAccountView: UIViewController, CreateNewAccountViewInput {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
+
     private lazy var signUpButton: UIButton = {
         let button = UIButton(type: .system)
         button.clipsToBounds = true
@@ -201,7 +200,7 @@ final class CreateAccountView: UIViewController, CreateNewAccountViewInput {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
+
     private lazy var signUpStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
@@ -213,10 +212,6 @@ final class CreateAccountView: UIViewController, CreateNewAccountViewInput {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -336,7 +331,7 @@ final class CreateAccountView: UIViewController, CreateNewAccountViewInput {
     @objc
     private func loginButtonPressed() {
         output?.createAccountWith(login: loginEntryTextfield.text ?? "", password: passwordEntryTextfield.text ?? "")
-        print("Login button pressed, waiting for Password button to be pressed.")
+        print("Login and password are correct, welcome to your account.")
     }
     
     @objc
@@ -359,8 +354,6 @@ final class CreateAccountView: UIViewController, CreateNewAccountViewInput {
         print("Sign up button pressed, loading ... ")
     }
 }
-  
-    // MARK: - Extensions
 
 extension UITextField {
     func setLeftIcon(_ image: UIImage) {
