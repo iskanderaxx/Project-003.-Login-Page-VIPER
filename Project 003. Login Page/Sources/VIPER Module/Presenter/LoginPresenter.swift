@@ -7,11 +7,11 @@
 
 import Foundation
 
-// 6. Протокол с ссылкой на Вью, чтобы передать собранные данные для отображения, полученные от Интерактора
+// 6. Презентер передает Вью собранные данные, полученные от Интерактора для отображения на экране
 protocol CreateNewAccountPresenterInput {
     var output: CreateNewAccountPresenterOutput? { get set }
 }
-// Второй протокол нужен потому, что Презентер обрабатывает Вью-события, по сути, выступая делегатом Вью
+// 2. Презентер обрабатывает Вью-события, по сути, выступая делегатом Вью
 protocol  CreateNewAccountPresenterOutput: AnyObject {
 }
 
@@ -35,7 +35,7 @@ final class LoginPresenter: CreateNewAccountViewOutput, CreateNewAccountInteract
     }
     
     func didRecieve(error: String) {
-        // Роутер показывает alert через метод .showAlert
+        // Тут Роутер показывает какой-нибудь alert через метод .showAlert
     }
     
     func didCreateAccountWith(login: String) {

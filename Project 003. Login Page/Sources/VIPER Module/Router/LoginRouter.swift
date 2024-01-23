@@ -15,6 +15,7 @@ protocol CreateNewAccountRouterInput {
 final class LoginRouter: CreateNewAccountRouterInput {
     weak var rootViewController: UIViewController?
     
+    // В Роутер также часто передаются объекты типа Factory для сборки экранов, хотя создание экранов в Роутере - это не совсем ОК
     func openUserProfileScreenWith(login: String) {
         let controller = UIViewController(nibName: nil, bundle: nil)
         controller.view.backgroundColor = .systemIndigo

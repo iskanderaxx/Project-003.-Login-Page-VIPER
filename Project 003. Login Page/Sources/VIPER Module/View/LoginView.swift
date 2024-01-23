@@ -8,10 +8,11 @@
 import UIKit
 
 protocol CreateNewAccountViewInput {
+    // 1.2. Через переменнуб output данные передаются Презентеру
     var output: CreateNewAccountViewOutput? { get set }
 }
 
-// 1. Вызывается, когда пользователь введет данные и нажмет кнопку "Login"
+// 1.1. Вызывается, когда пользователь введет данные и нажмет кнопку "Login"
 protocol CreateNewAccountViewOutput {
     func createAccountWith(login: String, password: String)
 }
