@@ -1,14 +1,25 @@
 //
-//  ViewController.swift
+//  LoginView.swift
 //  Project 003. Login Page
 //
-//  Created by Mac Alexander on 11.01.2024.
+//  Created by Mac Alexander on 19.01.2024.
 //
 
 import UIKit
 
-/* Я переделал название ViewController на First Screen, так как, по сути, у нас будет 1 экран, final class взято из видео для ДЗ, лектор говорил, что это хорошо для оптимизации. Контроллер, как говорили в том же видео, не должен быть загруженным, поэтому я добавил расширения в дополнительный файл с расширениями.*/
-class FirstScreen: UIViewController {
+protocol CreateNewAccountViewInput {
+    // 1.2. Через переменнуб output данные передаются Презентеру
+    var output: CreateNewAccountViewOutput? { get set }
+}
+
+// 1.1. Вызывается, когда пользователь введет данные и нажмет кнопку "Login"
+protocol CreateNewAccountViewOutput {
+    func createAccountWith(login: String, password: String)
+}
+
+// Как это бывает в View с MVP или MVVM, Вью в данном VIPER является связкой View + ViewController
+final class LoginView: UIViewController, CreateNewAccountViewInput {
+    var output: CreateNewAccountViewOutput?
     
     // MARK: - UIElements/Oulets
     
@@ -21,7 +32,7 @@ class FirstScreen: UIViewController {
         return imageView
     }()
     
-    private lazy var logLabel: UILabel = {
+    private lazy var loginLabel: UILabel = {
         let label = UILabel()
         label.text = "Login"
         label.textColor = .white
@@ -31,10 +42,10 @@ class FirstScreen: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    private lazy var logEntryTextfield: UITextField = {
+
+    private lazy var loginEntryTextfield: UITextField = {
         let textfield = UITextField()
-        textfield.placeholder = "keanureeves01"
+        textfield.placeholder = "login001"
         textfield.textColor = .systemGray
         textfield.backgroundColor = .white
         textfield.textAlignment = .center
@@ -44,10 +55,10 @@ class FirstScreen: UIViewController {
         textfield.translatesAutoresizingMaskIntoConstraints = false
         return textfield
     }()
-    
+
     private lazy var passwordEntryTextfield: UITextField = {
         let textfield = UITextField()
-        textfield.placeholder = "Password"
+        textfield.placeholder = "password001"
         textfield.textColor = .systemGray
         textfield.backgroundColor = .white
         textfield.textAlignment = .center
@@ -56,7 +67,7 @@ class FirstScreen: UIViewController {
         textfield.translatesAutoresizingMaskIntoConstraints = false
         return textfield
     }()
-    
+
     private lazy var loginButton: UIButton = {
         let logButton = UIButton(type: .system)
         logButton.clipsToBounds = true
@@ -75,7 +86,7 @@ class FirstScreen: UIViewController {
         logButton.translatesAutoresizingMaskIntoConstraints = false
         return logButton
     }()
-    
+
     private lazy var forgotPasswordButton: UIButton = {
         let helpButton = UIButton(type: .system)
         helpButton.clipsToBounds = true
@@ -87,7 +98,7 @@ class FirstScreen: UIViewController {
         helpButton.translatesAutoresizingMaskIntoConstraints = false
         return helpButton
     }()
-    
+
     private lazy var leftMargin: UIView = {
         let offset = UIView()
         offset.backgroundColor = .systemGray
@@ -95,7 +106,7 @@ class FirstScreen: UIViewController {
         offset.translatesAutoresizingMaskIntoConstraints = false
         return offset
     }()
-    
+
     private lazy var socialMediaConnectionLabel: UILabel = {
         let connectLabel = UILabel()
         connectLabel.text = "or connect with"
@@ -105,7 +116,7 @@ class FirstScreen: UIViewController {
         connectLabel.translatesAutoresizingMaskIntoConstraints = false
         return connectLabel
     }()
-    
+
     private lazy var rightMargin: UIView = {
         let offset = UIView()
         offset.backgroundColor = .systemGray
@@ -113,7 +124,7 @@ class FirstScreen: UIViewController {
         offset.translatesAutoresizingMaskIntoConstraints = false
         return offset
     }()
-    
+
     private lazy var socialMediaConnectionsStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
@@ -126,14 +137,14 @@ class FirstScreen: UIViewController {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    
+
     private lazy var facebookLoginButton: UIButton = {
         let button = UIButton(type: .system)
         button.clipsToBounds = true
         button.backgroundColor = .blue
         button.setTitle("Facebook", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 20
+        button.layer.cornerRadius = 15
         button.addTarget(self, action: #selector(facebookLoginButtonPressed), for: .touchUpInside)
         button.setImage(UIImage(systemName: "icons8-facebook"), for: .normal)
         
@@ -146,14 +157,14 @@ class FirstScreen: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
+
     private lazy var twitterLoginButton: UIButton = {
         let button = UIButton(type: .system)
         button.clipsToBounds = true
         button.backgroundColor = .systemBlue
         button.setTitle("Twitter", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 20
+        button.layer.cornerRadius = 15
         button.addTarget(self, action: #selector(twitterLoginButtonPressed), for: .touchUpInside)
         button.setImage(UIImage(systemName: "icons8-twitter"), for: .normal)
         
@@ -166,7 +177,7 @@ class FirstScreen: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
+
     private lazy var doNotHaveAccountQuestionLabel: UILabel = {
         let label = UILabel()
         label.text = "Don't have account?"
@@ -178,7 +189,7 @@ class FirstScreen: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
+
     private lazy var signUpButton: UIButton = {
         let button = UIButton(type: .system)
         button.clipsToBounds = true
@@ -190,7 +201,7 @@ class FirstScreen: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
+
     private lazy var signUpStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
@@ -203,8 +214,6 @@ class FirstScreen: UIViewController {
         return stack
     }()
     
-    // MARK: - Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupHierarchy()
@@ -214,7 +223,7 @@ class FirstScreen: UIViewController {
     // MARK: - Setup
     
     private func setupHierarchy() {
-        [imageView, logLabel, logEntryTextfield, passwordEntryTextfield, loginButton, forgotPasswordButton, leftMargin, socialMediaConnectionLabel, rightMargin, socialMediaConnectionsStack, facebookLoginButton, twitterLoginButton, doNotHaveAccountQuestionLabel, signUpButton, signUpStack].forEach {
+        [imageView, loginLabel, loginEntryTextfield, passwordEntryTextfield, loginButton, forgotPasswordButton, leftMargin, socialMediaConnectionLabel, rightMargin, socialMediaConnectionsStack, facebookLoginButton, twitterLoginButton, doNotHaveAccountQuestionLabel, signUpButton, signUpStack].forEach {
             view.addSubview($0)
         }
     }
@@ -226,20 +235,20 @@ class FirstScreen: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            logLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -300)
+            loginLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loginLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -300)
         ])
         
         NSLayoutConstraint.activate([
-            logEntryTextfield.topAnchor.constraint(equalTo: logLabel.bottomAnchor, constant: 40),
-            logEntryTextfield.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logEntryTextfield.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
-            logEntryTextfield.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50),
-            logEntryTextfield.heightAnchor.constraint(equalToConstant: 45)
+            loginEntryTextfield.topAnchor.constraint(equalTo: loginLabel.bottomAnchor, constant: 40),
+            loginEntryTextfield.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loginEntryTextfield.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
+            loginEntryTextfield.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50),
+            loginEntryTextfield.heightAnchor.constraint(equalToConstant: 45)
         ])
         
         NSLayoutConstraint.activate([
-            passwordEntryTextfield.topAnchor.constraint(equalTo: logEntryTextfield.bottomAnchor, constant: 10),
+            passwordEntryTextfield.topAnchor.constraint(equalTo: loginEntryTextfield.bottomAnchor, constant: 10),
             passwordEntryTextfield.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             passwordEntryTextfield.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
             passwordEntryTextfield.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50),
@@ -322,7 +331,8 @@ class FirstScreen: UIViewController {
     
     @objc
     private func loginButtonPressed() {
-        print("Login button pressed, waiting for Password button to be pressed.")
+        output?.createAccountWith(login: loginEntryTextfield.text ?? "", password: passwordEntryTextfield.text ?? "")
+        print("Login and password are correct, welcome to your account.")
     }
     
     @objc
@@ -344,6 +354,26 @@ class FirstScreen: UIViewController {
     private func signUpButtonPressed() {
         print("Sign up button pressed, loading ... ")
     }
-
 }
 
+extension UITextField {
+    func setLeftIcon(_ image: UIImage) {
+        let iconView = UIImageView(frame: CGRect(x: 20, y: 5, width: 20, height: 20))
+        iconView.image = image
+        let iconContainerView: UIView = UIView(frame: CGRect(x: 20, y: 0, width: 30, height: 30))
+        iconContainerView.addSubview(iconView)
+        leftView = iconContainerView
+        leftViewMode = .always
+    }
+}
+
+extension UITextField {
+    func setRightIcon(_ image: UIImage) {
+        let iconView = UIImageView(frame: CGRect(x: -5, y: 5, width: 20, height: 20))
+        iconView.image = image
+        let iconContainerView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+        iconContainerView.addSubview(iconView)
+        rightView = iconContainerView
+        rightViewMode = .always
+    }
+}
